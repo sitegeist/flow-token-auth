@@ -24,12 +24,19 @@ class HashToken extends AbstractToken
     {
         $authenticationHashToken = $actionRequest->getHttpRequest()->getQueryParams()['_authenticationHashToken'] ?? null;
         
-        //temporarily bypass htaccess authentification
+        
         if(substr($actionRequest->getHttpRequest()->getHeader('Authorization')[0],0,5) === 'Basic') {
             return false;
         }
 
-        if (!$authenticationHashToken) {
+        if (!$authenticationHashToken) {            
+            //temporarily bypass the htaccess authentification
+            if(isset($actionRequest->getHttpRequest()->getHeader('Authorization')[0])) {
+                if(substr($actionRequest->getHttpRequest()->getHeader('Authorization')[0],0,5) === 'Basic') {
+                    return false;
+                }
+            }
+            
             $authorizationHeader = $actionRequest->getHttpRequest()->getHeader('Authorization');
             if ($authorizationHeader) {
                 $authenticationHashToken = str_replace('Bearer ', '', $authorizationHeader);
