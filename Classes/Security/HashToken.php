@@ -24,11 +24,6 @@ class HashToken extends AbstractToken
     {
         $authenticationHashToken = $actionRequest->getHttpRequest()->getQueryParams()['_authenticationHashToken'] ?? null;
         
-        
-        if(substr($actionRequest->getHttpRequest()->getHeader('Authorization')[0],0,5) === 'Basic') {
-            return false;
-        }
-
         if (!$authenticationHashToken) {            
             //temporarily bypass the htaccess authentification
             if(isset($actionRequest->getHttpRequest()->getHeader('Authorization')[0])) {
